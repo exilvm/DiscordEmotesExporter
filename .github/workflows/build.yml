@@ -1,6 +1,5 @@
 name: Release
 
-
 on:
   workflow_dispatch:
     inputs:
@@ -8,10 +7,6 @@ on:
         required: true
         type: string
 
-on:
-  push:
-    branches:
-      - master
 jobs:
   build:
     runs-on: [ubuntu-latest, macos-latest, windows-latest]
