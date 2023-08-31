@@ -1,0 +1,36 @@
+name: Release
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        type: string
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.11
+    - name: Install dependencies
+      run: |
+        cd src
+        python -m pip install --upgrade pip
+        python -m pip install -U discord.py-self python-slugify
+    - name: Create package
+      run: |
+        pyinstaller --onefile main.py
+    - name: Create a release
+        run: |
+          gh release create ${{ inputs.TAG }} ./dist/* --draft --generate-notes -t "Release ${{ inputs.TAG }}" -R ${{github.repository}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_RELEASE }}
