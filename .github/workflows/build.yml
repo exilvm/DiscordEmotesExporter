@@ -26,10 +26,17 @@ jobs:
     - name: Create package
       run: |
         pyinstaller --onefile main.py
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: ./dist
   release:
     needs: build
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/download-artifact@v3
+      with:
+        name: build
     - name: Create a release
       run: |
         gh release create ${{ inputs.version }} ./dist/* --generate-notes -t "Release ${{ inputs.version }}" -R ${{github.repository}}
