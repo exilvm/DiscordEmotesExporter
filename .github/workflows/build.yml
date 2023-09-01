@@ -54,8 +54,9 @@ jobs:
             fi
         done
         echo "OUTPUT_DIR=$tmpdir" >> $GITHUB_OUTPUT
+      id: organizer
     - name: Create a release
       run: |
-        gh release create ${{ inputs.version }} ${{ steps.random-color-generator.outputs.SELECTED_COLOR }}/* --generate-notes -t "Release ${{ inputs.version }}" -R ${{github.repository}}
+        gh release create ${{ inputs.version }} ${{ steps.organizer.outputs.OUTPUT_DIR }}/* --generate-notes -t "Release ${{ inputs.version }}" -R ${{github.repository}}
       env:
         GITHUB_TOKEN: ${{ secrets.GH_RELEASE }}
