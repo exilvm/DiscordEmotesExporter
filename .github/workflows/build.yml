@@ -22,7 +22,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install -U discord.py-self python-slugify
+        python -m pip install -U discord.py-self python-slugify pyinstaller
     - name: Create package
       run: |
         pyinstaller --onefile main.py
