@@ -58,6 +58,6 @@ jobs:
       shell: python
     - name: Create a release
       run: |
-        gh release create ${{ inputs.version }} './output/*' --generate-notes -t "Release ${{ inputs.version }}" -R ${{github.repository}}
+        gh release create ${{ inputs.version }} ./output/* --generate-notes -t "Release ${{ inputs.version }}" -R ${{github.repository}}
       env:
         GITHUB_TOKEN: ${{ secrets.GH_RELEASE }}
