@@ -8,7 +8,7 @@ The downloaded assets will be exported to the `exports` directory.
 
 1. Grab the executable for your operating system from [releases/latest](https://github.com/exilvm/DiscordChannelCloner/releases/latest).
 2. Open the Terminal/Command Prompt.
-2. Pass the token to the exectuable, for example:
+2. Pass your Discord token to the exectuable, for example:
     ```bash
     ./main YOUR_TOKEN
     ```
