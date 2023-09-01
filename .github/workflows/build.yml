@@ -28,6 +28,6 @@ jobs:
         pyinstaller --onefile main.py
     - name: Create a release
       run: |
-        gh release create ${{ inputs.version }} "./dist/*" --generate-notes -t "Release ${{ inputs.version }}" -R ${{github.repository}}
+        gh release create ${{ inputs.version }} ./dist/* --generate-notes -t "Release ${{ inputs.version }}" -R ${{github.repository}}
       env:
         GITHUB_TOKEN: ${{ secrets.GH_RELEASE }}
