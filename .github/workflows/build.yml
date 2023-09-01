@@ -25,11 +25,20 @@ jobs:
         python -m pip install -U discord.py-self python-slugify pyinstaller
     - name: Create package
       run: |
-        pyinstaller --onefile main.py
+        pyinstaller --onefile main.py --distpath dist/${{ matrix.os }}
+    - run: |
+        parent_directory="dist"
+        for platform_directory in "$parent_directory"/*; do
+            platform_name=$(basename "$platform_directory")
+            for executable_file in "$platform_directory"/*; do
+                executable_name=$(basename "$executable_file")
+                mv $platform_directory/$executable_name $platform_directory/$platform_name-$executable_name
+            done
+        done
     - uses: actions/upload-artifact@v3
       with:
         name: build
-        path: ./dist
+        path: ./dist/*/*
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -39,6 +48,6 @@ jobs:
         name: build
     - name: Create a release
       run: |
-        gh release create ${{ inputs.version }} ./* --generate-notes -t "Release ${{ inputs.version }}" -R ${{github.repository}}
+        gh release create ${{ inputs.version }} './dist/*' ./* --generate-notes -t "Release ${{ inputs.version }}" -R ${{github.repository}}
       env:
         GITHUB_TOKEN: ${{ secrets.GH_RELEASE }}
