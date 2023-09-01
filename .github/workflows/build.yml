@@ -38,25 +38,24 @@ jobs:
       with:
         name: dist
     - run: |
-        import os
-        import tempfile
-        import shutil
-        
-        parent_directory = "./"
-        with tempfile.TemporaryDirectory() as tmpdir:
-            for platform_directory in os.listdir(parent_directory):
-                platform_path = os.path.join(parent_directory, platform_directory)
-                if os.path.isdir(platform_path):
-                    platform_name = os.path.basename(platform_directory)
-                    for executable_file in os.listdir(platform_path):
-                        executable_name = os.path.basename(executable_file)
-                        new_executable_name = f"{platform_name}-{executable_name}"
-                        source_path = os.path.join(platform_path, executable_name)
-                        destination_path = os.path.join(tmpdir, new_executable_name)
-                        shutil.move(source_path, destination_path)
-      shell: python
+        parent_directory="./"
+        tmpdir=$(mktemp -d)
+        for platform_directory in $(ls $parent_directory); do
+            platform_path="$parent_directory/$platform_directory"
+            if [ -d "$platform_path" ]; then
+                platform_name=$(basename "$platform_directory")
+                for executable_file in $(ls $platform_path); do
+                    executable_name=$(basename "$executable_file")
+                    new_executable_name="$platform_name-$executable_name"
+                    source_path="$platform_path/$executable_name"
+                    destination_path="$tmpdir/$new_executable_name"
+                    mv "$source_path" "$destination_path"
+                done
+            fi
+        done
+        echo "OUTPUT_DIR=$tmpdir" >> $GITHUB_OUTPUT
     - name: Create a release
       run: |
-        gh release create ${{ inputs.version }} ./output/* --generate-notes -t "Release ${{ inputs.version }}" -R ${{github.repository}}
+        gh release create ${{ inputs.version }} ${{ steps.random-color-generator.outputs.SELECTED_COLOR }}/* --generate-notes -t "Release ${{ inputs.version }}" -R ${{github.repository}}
       env:
         GITHUB_TOKEN: ${{ secrets.GH_RELEASE }}
