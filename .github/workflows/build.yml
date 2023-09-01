@@ -39,22 +39,21 @@ jobs:
         name: dist
     - run: |
         import os
+        import tempfile
         import shutil
         
         parent_directory = "./"
-        output_directory = os.path.join(parent_directory, "output")
-        os.makedirs(output_directory, exist_ok=True)
-        
-        for platform_directory in os.listdir(parent_directory):
-            platform_path = os.path.join(parent_directory, platform_directory)
-            if os.path.isdir(platform_path):
-                platform_name = os.path.basename(platform_directory)
-                for executable_file in os.listdir(platform_path):
-                    executable_name = os.path.basename(executable_file)
-                    new_executable_name = f"{platform_name}-{executable_name}"
-                    source_path = os.path.join(platform_path, executable_name)
-                    destination_path = os.path.join(output_directory, new_executable_name)
-                    shutil.move(source_path, destination_path)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            for platform_directory in os.listdir(parent_directory):
+                platform_path = os.path.join(parent_directory, platform_directory)
+                if os.path.isdir(platform_path):
+                    platform_name = os.path.basename(platform_directory)
+                    for executable_file in os.listdir(platform_path):
+                        executable_name = os.path.basename(executable_file)
+                        new_executable_name = f"{platform_name}-{executable_name}"
+                        source_path = os.path.join(platform_path, executable_name)
+                        destination_path = os.path.join(tmpdir, new_executable_name)
+                        shutil.move(source_path, destination_path)
       shell: python
     - name: Create a release
       run: |
