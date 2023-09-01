@@ -21,7 +21,6 @@ jobs:
         python-version: 3.11
     - name: Install dependencies
       run: |
-        cd src
         python -m pip install --upgrade pip
         python -m pip install -U discord.py-self python-slugify
     - name: Create package
