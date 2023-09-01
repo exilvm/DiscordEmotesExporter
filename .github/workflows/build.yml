@@ -26,6 +26,10 @@ jobs:
     - name: Create package
       run: |
         pyinstaller --onefile main.py
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
     - name: Create a release
       run: |
         gh release create ${{ inputs.version }} ./dist/* --generate-notes -t "Release ${{ inputs.version }}" -R ${{github.repository}}
