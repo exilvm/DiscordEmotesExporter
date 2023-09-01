@@ -2,8 +2,9 @@ import os
 import discord
 from slugify import slugify
 import asyncio
+import sys
 
-TOKEN = os.environ['TOKEN']
+TOKEN = sys.argv[1]
 
 async def to_slug(name):
     return slugify(name, entities=False, decimal=False, hexadecimal=False, max_length=0, word_boundary=False, separator='_', save_order=False, stopwords=(), regex_pattern=None, lowercase=True, replacements=(), allow_unicode=False)
