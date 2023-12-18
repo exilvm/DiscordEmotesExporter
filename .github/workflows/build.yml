@@ -28,7 +28,7 @@ jobs:
     - name: Create package
       run: |
         pyinstaller --onefile main.py --distpath dist/${{ matrix.os }}
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: dist
         path: ./dist
